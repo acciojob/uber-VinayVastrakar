@@ -1,31 +1,40 @@
 package com.driver.model;
 
 import javax.persistence.*;
-import java.sql.Array;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-public class Driver {
-
+@Table(name = "Driver")
+public class Driver{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int driverId;
+    int driverId;
 
-    private String mobile;
-    private String password;
+    String mobile;
 
+    String password;
+
+    //For mapping to tripBooking(Child)
     @OneToMany(mappedBy = "driver", cascade = CascadeType.ALL)
-    private List<TripBooking> tripBookingList = new ArrayList<>();
+    List<TripBooking> tripBookingList = new ArrayList<>();
+
+    //For mapping to Cab(Parent)
+    @OneToOne(mappedBy = "driver", cascade = CascadeType.ALL)
+    Cab cab;
 
     public Driver() {
+
     }
 
-    public Driver(int driverId, String mobile, String password, List<TripBooking> tripBookingList) {
+
+
+    public Driver(int driverId, String mobile, String password, List<TripBooking> tripBookingList, Cab cab) {
         this.driverId = driverId;
         this.mobile = mobile;
         this.password = password;
         this.tripBookingList = tripBookingList;
+        this.cab = cab;
     }
 
     public int getDriverId() {
@@ -60,7 +69,11 @@ public class Driver {
         this.tripBookingList = tripBookingList;
     }
 
-    @OneToOne
-    @JoinColumn
-    Cab cab;
+    public Cab getCab() {
+        return cab;
+    }
+
+    public void setCab(Cab cab) {
+        this.cab = cab;
+    }
 }
